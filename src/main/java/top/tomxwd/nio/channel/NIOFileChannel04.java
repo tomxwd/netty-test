@@ -1,4 +1,4 @@
-package top.tomxwd.nio;
+package top.tomxwd.nio.channel;
 
 import java.io.*;
 import java.nio.channels.FileChannel;

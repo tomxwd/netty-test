@@ -1,4 +1,4 @@
-package top.tomxwd.nio;
+package top.tomxwd.nio.buffer;
 
 import java.nio.ByteBuffer;
 
