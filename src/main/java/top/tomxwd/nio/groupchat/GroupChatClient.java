@@ -74,11 +74,12 @@ public class GroupChatClient {
                         // 把读取到的数据转成字符串
                         String msg = new String(buffer.array());
                         System.out.println(msg.trim());
-
                     }
+                    // 删除当前SelectionKey，防止重复操作
+                    iterator.remove();
                 }
             } else {
-                System.out.println("没有可用的通道");
+                //System.out.println("没有可用的通道");
             }
         } catch (IOException e){
             e.printStackTrace();
