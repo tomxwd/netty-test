@@ -144,7 +144,9 @@ public class GroupChatServer {
     }
 
     public static void main(String[] args) {
-
+        // 创建服务器对象
+        GroupChatServer groupChatServer = new GroupChatServer();
+        groupChatServer.listen();
     }
 
 }
