@@ -9,6 +9,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -54,9 +55,8 @@ public class GroupChatClient {
 
     /**
      * 读取从服务器回复的信息
-     * @param info
      */
-    public void readInfo(String info){
+    public void readInfo(){
         try{
             int readChannels = selector.select();
             if(readChannels>0){
@@ -82,6 +82,28 @@ public class GroupChatClient {
             }
         } catch (IOException e){
             e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        // 启动客户端
+        GroupChatClient chatClient = new GroupChatClient();
+        // 启动一个线程，每隔三秒，读取从服务器端发送的数据
+        new Thread(()->{
+            while (true){
+                chatClient.readInfo();
+                try{
+                    Thread.currentThread().sleep(3000);
+                } catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        // 客户端发送数据给服务器端
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()){
+            String s = scanner.nextLine();
+            chatClient.sendInfo(s);
         }
     }
 
