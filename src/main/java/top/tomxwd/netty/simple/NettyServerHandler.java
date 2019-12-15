@@ -2,8 +2,10 @@ package top.tomxwd.netty.simple;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelPipeline;
 import io.netty.util.CharsetUtil;
 
 import java.nio.ByteBuffer;
@@ -27,8 +29,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        System.out.println("服务器读取线程 ："+Thread.currentThread().getName());
         System.out.println("读取事件发生=================");
         System.out.println("server ctx = " + ctx);
+        System.out.println("看看Channel和pipeline的关系");
+        Channel channel = ctx.channel();
+        ChannelPipeline pipeline = ctx.pipeline();// 本质是一个双向链表，设计到出栈入栈的问题
+
         // msg转为一个ByteBuffer
         // ByteBuf是netty提供的，不是NIO的ByteBuffer，Netty提供的性能更高
         ByteBuf buf = (ByteBuf) msg;

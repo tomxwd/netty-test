@@ -21,9 +21,10 @@ public class NettySever {
             1. 创建两个线程组BossGroup以及WorkGroup
             2. BossGroup只是处理连接请求，真正与客户端的业务处理，会交给WorkerGroup完成
             3. 两个都是无限循环
+            4. BossGroup和WorkerGroup含有的子线程（NioEventLoop）的个数，默认是CPU的核数*2
          */
         // 创建BossGroup 以及 WorkGroup
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         try {
