@@ -9,6 +9,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.util.CharsetUtil;
 
 import java.nio.ByteBuffer;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 说明：
@@ -32,40 +33,45 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         // 这里有一个非常耗费时间的业务   ->  异步执行    -> 提交到该Channel对应的NioEventLoop的taskQueue中即可
 
         // 解决方案1：用户程序自定义的普通任务
-        ctx.channel().eventLoop().execute(()->{
-            try {
-                Thread.sleep(10*1000);
-                ctx.writeAndFlush(Unpooled.copiedBuffer("hello,服务端10秒了",CharsetUtil.UTF_8));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-        ctx.channel().eventLoop().execute(()->{
-            try {
-                Thread.sleep(20*1000);
-                ctx.writeAndFlush(Unpooled.copiedBuffer("hello,服务端30秒了",CharsetUtil.UTF_8));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
+        /*
+            ctx.channel().eventLoop().execute(()->{
+                try {
+                    Thread.sleep(10*1000);
+                    ctx.writeAndFlush(Unpooled.copiedBuffer("hello,服务端10秒了",CharsetUtil.UTF_8));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            ctx.channel().eventLoop().execute(()->{
+                try {
+                    Thread.sleep(20*1000);
+                    ctx.writeAndFlush(Unpooled.copiedBuffer("hello,服务端30秒了",CharsetUtil.UTF_8));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        */
 
-
+        // 用户自定义定时任务    ->  该任务是提交到scheduleTaskQueue中
+        ctx.channel().eventLoop().schedule(()->{
+            ctx.writeAndFlush(Unpooled.copiedBuffer("hello,服务端5秒了",CharsetUtil.UTF_8));
+        },5, TimeUnit.SECONDS);
 
         System.out.println("go on...");
 
         /*
-        System.out.println("服务器读取线程 ："+Thread.currentThread().getName());
-        System.out.println("读取事件发生=================");
-        System.out.println("server ctx = " + ctx);
-        System.out.println("看看Channel和pipeline的关系");
-        Channel channel = ctx.channel();
-        ChannelPipeline pipeline = ctx.pipeline();// 本质是一个双向链表，设计到出栈入栈的问题
+            System.out.println("服务器读取线程 ："+Thread.currentThread().getName());
+            System.out.println("读取事件发生=================");
+            System.out.println("server ctx = " + ctx);
+            System.out.println("看看Channel和pipeline的关系");
+            Channel channel = ctx.channel();
+            ChannelPipeline pipeline = ctx.pipeline();// 本质是一个双向链表，设计到出栈入栈的问题
 
-        // msg转为一个ByteBuffer
-        // ByteBuf是netty提供的，不是NIO的ByteBuffer，Netty提供的性能更高
-        ByteBuf buf = (ByteBuf) msg;
-        System.out.println("客户端发送的消息是：" + buf.toString(CharsetUtil.UTF_8));
-        System.out.println("客户端的地址是：" + ctx.channel().remoteAddress());
+            // msg转为一个ByteBuffer
+            // ByteBuf是netty提供的，不是NIO的ByteBuffer，Netty提供的性能更高
+            ByteBuf buf = (ByteBuf) msg;
+            System.out.println("客户端发送的消息是：" + buf.toString(CharsetUtil.UTF_8));
+            System.out.println("客户端的地址是：" + ctx.channel().remoteAddress());
         */
 
     }
