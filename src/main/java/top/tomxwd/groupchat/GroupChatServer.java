@@ -50,7 +50,7 @@ public class GroupChatServer {
                             ch.pipeline()
                                     .addLast("decoder",new StringDecoder())
                                     .addLast("encoder",new StringEncoder())
-                                    .addLast(null);
+                                    .addLast(new GroupChatServerHandler());
                         }
                     });
             System.out.println("netty群聊服务器启动");
