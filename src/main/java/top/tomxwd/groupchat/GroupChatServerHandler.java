@@ -36,7 +36,7 @@ public class GroupChatServerHandler extends SimpleChannelInboundHandler<String> 
         Channel channel = ctx.channel();
         channelGroup.add(channel);
         // 将该客户端的信息推送给其他在线的客户端,channelgroup的writeAndFlush会遍历所有channel并发送消息
-        channelGroup.writeAndFlush(sdf.format(new Date())+"【客户端】" + channel.remoteAddress() + "加入聊天\n");
+        channelGroup.writeAndFlush(sdf.format(new Date()) + "【客户端】" + channel.remoteAddress() + "加入聊天\n");
     }
 
     /**
@@ -49,7 +49,7 @@ public class GroupChatServerHandler extends SimpleChannelInboundHandler<String> 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         Channel channel = ctx.channel();
-        channelGroup.writeAndFlush(sdf.format(new Date())+"【客户端】" + channel.remoteAddress() + "离开了\n");
+        channelGroup.writeAndFlush(sdf.format(new Date()) + "【客户端】" + channel.remoteAddress() + "离开了\n");
         System.out.println("当前ChannelGroup Size：" + channelGroup.size());
     }
 
@@ -88,12 +88,12 @@ public class GroupChatServerHandler extends SimpleChannelInboundHandler<String> 
         Channel channel = ctx.channel();
         // 遍历channelGroup，根据不同的情况，回送不同的消息
         channelGroup.forEach(ch -> {
-            if (ch != ch) {
+            if (channel != ch) {
                 // 非当前channel
-                ch.writeAndFlush(sdf.format(new Date())+"【客户】" + channel.remoteAddress() + "发送消息：" + msg + "\n");
+                ch.writeAndFlush(sdf.format(new Date()) + "【客户】" + channel.remoteAddress() + "发送消息：" + msg + "\n");
             } else {
                 // 自己发送的消息
-                ch.writeAndFlush(sdf.format(new Date())+"【我】发送消息：" + msg + "/n");
+                ch.writeAndFlush(sdf.format(new Date()) + "【我】发送消息：" + msg + "\n");
             }
         });
     }

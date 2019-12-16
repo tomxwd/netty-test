@@ -12,6 +12,7 @@ import io.netty.handler.codec.string.StringEncoder;
 
 /**
  * 群聊系统服务端
+ *
  * @author xieweidu
  * @createDate 2019-12-16 22:32
  */
@@ -22,7 +23,7 @@ public class GroupChatServer {
      */
     private int port;
 
-    public GroupChatServer(int port){
+    public GroupChatServer(int port) {
         this.port = port;
     }
 
@@ -38,18 +39,18 @@ public class GroupChatServer {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             // 设置参数
             serverBootstrap
-                    .group(bossGroup,workerGroup)
+                    .group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .option(ChannelOption.SO_BACKLOG,128)
-                    .childOption(ChannelOption.SO_KEEPALIVE,true)
+                    .option(ChannelOption.SO_BACKLOG, 128)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             // 获取Pipeline
                             // 向Pipeline加入一个解码器以及一个编码器,以及自己的业务处理Handler
                             ch.pipeline()
-                                    .addLast("decoder",new StringDecoder())
-                                    .addLast("encoder",new StringEncoder())
+                                    .addLast("decoder", new StringDecoder())
+                                    .addLast("encoder", new StringEncoder())
                                     .addLast(new GroupChatServerHandler());
                         }
                     });
