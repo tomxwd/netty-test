@@ -10,12 +10,20 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import javax.lang.model.element.VariableElement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author xieweidu
  * @createDate 2019-12-16 22:56
  */
 public class GroupChatServerHandler extends SimpleChannelInboundHandler<String> {
+
+    /**
+     * 私聊功能，定义一个HashMap来存储
+     */
+    private static Map<String,Channel> channels = new HashMap();
+
 
     /**
      * 定义一个Channel组，管理所有的Channel
@@ -34,9 +42,11 @@ public class GroupChatServerHandler extends SimpleChannelInboundHandler<String> 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         Channel channel = ctx.channel();
-        channelGroup.add(channel);
         // 将该客户端的信息推送给其他在线的客户端,channelgroup的writeAndFlush会遍历所有channel并发送消息
         channelGroup.writeAndFlush(sdf.format(new Date()) + "【客户端】" + channel.remoteAddress() + "加入聊天\n");
+        channelGroup.add(channel);
+        // 具体使用的时候，key是变化的，比如数据库中存储的userId，通过id就可以找到对应的用户的Channel实现私聊
+        channels.put("id100",channel);
     }
 
     /**
