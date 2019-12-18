@@ -35,6 +35,8 @@ public class MyHeartBeatServerHandler extends ChannelInboundHandlerAdapter {
             }
             System.out.println(ctx.channel().remoteAddress() + "--------超时事件发生--------" + eventType);
             System.out.println("在这里服务器判断空闲类型，做出相应处理");
+//             如果发生空闲，直接关闭channel
+//            ctx.channel().close();
         }
     }
 }
