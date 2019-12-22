@@ -1,0 +1,31 @@
+syntax = "proto3"; // 版本
+option optimize_for = SPEED; // 快速解析
+option java_package = "top.tomxwd.netty.codec2"; // 指定生成到哪个包下
+option java_outer_classname = "MyDataInfo"; //外部类名称
+
+// protobuf可以使用message管理其他的message
+message MyMessage {
+    // 定义一个枚举类型
+    enum DataType {
+        StudentType = 0; // 这里编号要从0开始
+        WorkerType = 1;
+    }
+
+    // 用data_type来标识传的是哪一个枚举类型
+    DataType data_type = 1;
+    // 表示每次枚举类型最多只能出现其中的一个，节省空间
+    oneof dataBody {
+        Student student = 2;
+        Worker worker = 3;
+    }
+
+}
+
+message Student {  // 会在外部类生成一个内部类Student，他是真正的发送POJO对象
+    int32 id = 1;  // Student类中有一个属性名字为id，类型为int32（protobuf类型）1不代表值，表示属性的序号
+    string name = 2;
+}
+message Worker {
+    string name = 1;
+    int32 age = 2;
+}
