@@ -4,6 +4,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import top.tomxwd.netty.inboundandoutboundhandler.codec.MyByteToLongDecoder;
+import top.tomxwd.netty.inboundandoutboundhandler.codec.MyByteToLongDecoder2;
 import top.tomxwd.netty.inboundandoutboundhandler.codec.MyLongToByteEncoder;
 
 /**
@@ -16,7 +17,7 @@ public class MyClientInitializer extends ChannelInitializer<SocketChannel> {
         ChannelPipeline pipeline = ch.pipeline();
         // 出站加入一个Handler进行编码
         pipeline.addLast(new MyLongToByteEncoder())
-                .addLast(new MyByteToLongDecoder())
+                .addLast(new MyByteToLongDecoder2())
                 .addLast(new MyClientHandler());
     }
 }
