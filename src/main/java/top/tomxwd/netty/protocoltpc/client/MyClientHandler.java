@@ -24,6 +24,7 @@ public class MyClientHandler extends SimpleChannelInboundHandler<MessageProtocol
         int len = msg.getLen();
         String content = new String(msg.getContent(), CharsetUtil.UTF_8);
         System.out.println("客户端接收到消息如下：");
+
         System.out.println("消息长度：" + len);
         System.out.println("消息内容：" + content);
         System.out.println("客户端接收消息数量：" + count.incrementAndGet());
